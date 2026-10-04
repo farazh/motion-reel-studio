@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Motion Reel Studio — demo</title>
+<style>html,body{margin:0;background:#172320}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>
+const q = new URLSearchParams(location.search), c = document.querySelector('#c');
+c.width = Number(q.get('width') || 1080); c.height = Number(q.get('height') || 1920);
+const g = c.getContext('2d'), duration = Number(q.get('duration') || 6);
+const clamp = x => Math.max(0, Math.min(1, x));
+const smooth = x => { x=clamp(x); return x*x*(3-2*x); };
+// Resolve image.decode() and FontFace.load() promises here when adding assets.
+window.ready = Promise.resolve();
+window.seek = seconds => {
+  const t=seconds/duration*6, w=c.width,h=c.height,s=Math.min(w/1080,h/1920);
+  g.setTransform(1,0,0,1,0,0); g.fillStyle='#172320';g.fillRect(0,0,w,h);
+  g.save();g.translate(w/2,h/2);g.scale(s,s);
+  const travel = smooth((t-.1)/1.15);
+  // A moving tile becomes the stage for the message; all state derives from time.
+  g.save();g.translate(-340+680*travel,-470+60*Math.sin(travel*Math.PI));g.rotate(-.3+.6*travel);
+  g.fillStyle='#D5F29B';g.beginPath();g.roundRect(-108,-108,216,216,36);g.fill();
+  g.fillStyle='#172320';g.beginPath();g.moveTo(-25,-46);g.lineTo(46,0);g.lineTo(-25,46);g.closePath();g.fill();g.restore();
+  const lines=['Make your','next story','move.'];
+  lines.forEach((line,i)=>{
+    const enter=smooth((t-.3-i*.23)/.8);
+    g.save();g.globalAlpha=enter;g.translate(0,(1-enter)*65);
+    g.font=`800 ${i===2?162:112}px sans-serif`;g.textAlign='left';
+    g.fillStyle=i===2?'#D5F29B':'#F6F3E9';g.fillText(line,-430,-130+i*150);g.restore();
+  });
+  const p=smooth((t-2)/2.4);
+  g.strokeStyle='#45564F';g.lineWidth=3;g.beginPath();g.moveTo(-420,490);g.lineTo(420,490);g.stroke();
+  g.strokeStyle='#D5F29B';g.lineWidth=6;g.beginPath();g.moveTo(-420,490);g.lineTo(-420+840*p,490);g.stroke();
+  ['IDEA','MOTION','STORY'].forEach((label,i)=>{
+    const active=smooth((t-2-i*.75)/.45), x=-420+i*420;
+    g.fillStyle=active>.5?'#D5F29B':'#45564F';g.beginPath();g.arc(x,490,11+active*5,0,Math.PI*2);g.fill();
+    g.font='600 26px sans-serif';g.textAlign=i===0?'left':i===2?'right':'center';g.fillStyle='#F6F3E9';g.fillText(label,x,550);
+  });
+  g.globalAlpha=smooth((t-4.2)/.7);g.font='500 30px sans-serif';g.textAlign='left';g.fillStyle='#B8C8BF';g.fillText('MOTION REEL STUDIO',-420,740);
+  g.restore();
+};
+window.seek(Number(q.get('t') || 1.5));
+</script>
+</html>

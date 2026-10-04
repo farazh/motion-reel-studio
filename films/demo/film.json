@@ -1,0 +1,10 @@
+{
+  "title": "Make your next story move",
+  "width": 1080,
+  "height": 1920,
+  "fps": 60,
+  "duration": 6,
+  "scene": "index.html",
+  "audio": null,
+  "lufs": -16
+}

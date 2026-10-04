@@ -1,0 +1,28 @@
+{
+  "name": "motion-reel-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A portable, agent-guided studio for rendering motion graphics from code.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "new": "node scripts/new-film.mjs",
+    "render": "node scripts/render.mjs",
+    "board": "node scripts/board.mjs",
+    "mix": "node scripts/mix.mjs",
+    "qc": "node scripts/qc.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  },
+  "author": "farazh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farazh/motion-reel-studio.git"
+  }
+}
